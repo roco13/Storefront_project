@@ -16,7 +16,9 @@ export class ProductStore {
       // @ts-ignore
       const conn: any = await client.connect();
       const sql = 'SELECT * FROM products';
+      console.log('sql', sql);
       const result = await conn.query(sql);
+      console.log('result', result.rows);
       conn.release(); //release the connection
       return result.rows;
     } catch (err) {
@@ -66,39 +68,39 @@ export class ProductStore {
     }
   }
 
-  async addProductToOrder(
-    quantity: number,
-    orderId: string,
-    productId: string
-  ): Promise<Product> {
-    //get order to see if it is open
-    try {
-      const sql = 'SELECT * FROM orders WHERE id=($1)';
-      //@ts-ignore
-      const conn: any = await client.connect();
-      const result = await conn.query(sql, [orderId]);
-      const order = result.rows[0];
-      if (order.status !== 'open') {
-        throw new Error(
-          `Could not add product ${productId} to order ${orderId} because order is not open`
-        );
-      }
-      conn.release();
-    } catch (err) {
-      throw new Error(`Error: ${err}`);
-    }
-    //add product to order
-    try {
-      const sql =
-        'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *';
-      //@ts-ignore
-      const conn: any = await client.connect();
-      const result = await conn.query(sql, [quantity, orderId, productId]);
-      const product = result.rows[0];
-      conn.release();
-      return product;
-    } catch (err) {
-      throw new Error(`Error: ${err}`);
-    }
-  }
+  // async addProductToOrder(
+  //   quantity: number,
+  //   orderId: string,
+  //   productId: string
+  // ): Promise<Product> {
+  //   //get order to see if it is open
+  //   try {
+  //     const sql = 'SELECT * FROM orders WHERE id=($1)';
+  //     //@ts-ignore
+  //     const conn: any = await client.connect();
+  //     const result = await conn.query(sql, [orderId]);
+  //     const order = result.rows[0];
+  //     if (order.status !== 'open') {
+  //       throw new Error(
+  //         `Could not add product ${productId} to order ${orderId} because order is not open`
+  //       );
+  //     }
+  //     conn.release();
+  //   } catch (err) {
+  //     throw new Error(`Error: ${err}`);
+  //   }
+  //   //add product to order
+  //   try {
+  //     const sql =
+  //       'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *';
+  //     //@ts-ignore
+  //     const conn: any = await client.connect();
+  //     const result = await conn.query(sql, [quantity, orderId, productId]);
+  //     const product = result.rows[0];
+  //     conn.release();
+  //     return product;
+  //   } catch (err) {
+  //     throw new Error(`Error: ${err}`);
+  //   }
+  // }
 }

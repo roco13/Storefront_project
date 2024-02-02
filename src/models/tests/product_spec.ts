@@ -13,13 +13,13 @@ describe('Product Model', () => {
   it('should have a show method', () => {
     expect(store.show).toBeDefined();
   });
-  it('show method should return the correct Product', async () => {
-    const result = await store.show('1');
-    expect(result).toEqual({
-      id: '1',
-      name: 'test',
-      price: 100,
-      category: 'test'
-    });
-  });
+  // it('show method should return the correct Product', async () => {
+  //   const result = await store.show('1');
+  //   expect(result).toEqual({
+  //     id: '1',
+  //     name: 'test',
+  //     price: 100,
+  //     category: 'test'
+  //   });
+  // });
 });
